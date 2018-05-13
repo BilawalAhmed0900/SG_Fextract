@@ -7,7 +7,7 @@ MPK is a file with simple structure. Its been used by Steins;Gate and Steins;Gat
 ##### Total 8 bytes
 The header of the MPK is
 
-Name | Size | Values(if any) |
+Name | Size | Values |
 --- | --- | --- 
 **IDENT** | 4 bytes | "MPK"\0
 Null Bytes | 2 bytes | \0\0

@@ -65,7 +65,7 @@ typedef struct _parameters
 
 void print_help(void)
 {
-    fprintf(HELP_PRINT_TO, "SG_Fopener.exe [-h, -l] Input Output\n");
+    fprintf(HELP_PRINT_TO, "SG_Fextract.exe [-h, -l] Input Output\n");
     fprintf(HELP_PRINT_TO, "\n");
     fprintf(HELP_PRINT_TO, "Required parameters:\n");
     fprintf(HELP_PRINT_TO, "   Input \t: Input file to read from\n");
@@ -74,6 +74,7 @@ void print_help(void)
     fprintf(HELP_PRINT_TO, "Optional parameters:\n");
     fprintf(HELP_PRINT_TO, "   -h    \t: Print this help\n");
     fprintf(HELP_PRINT_TO, "   -l    \t: List file from input only\n");
+    fprintf(HELP_PRINT_TO, "\n");
     getch();
 }
 
@@ -348,6 +349,8 @@ int32_t main(int32_t argc, char *argv[])
 {
     FILE *inptr;
     parameters params;
+    
+    fprintf(HELP_PRINT_TO, "SG_Fextract - Made by Dragneel1234@Github\n");
     
     memset(&params, 0, sizeof(parameters));
     populate(&params, argc, argv);

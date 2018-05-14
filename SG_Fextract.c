@@ -4,7 +4,7 @@
 #include <dirent.h>
 #include <string.h>
 
-#if defined(__linux__) || defined(__APPLE__)
+#if defined(__linux__)
     #include <sys/stat.h>
     #include <alloca.h>
     #include <unistd.h>
@@ -13,10 +13,18 @@
     #define _mkdir(name) mkdir(name)
 #endif
 
-#if defined(__i386__)
-    #define SIZE_T_SPECIFIER "%llu"
-#else
-    #define SIZE_T_SPECIFIER "%u"
+#if defined(__linux__)
+    #if defined(__i386__ )
+        #define SIZE_T_SPECIFIER "%lu"
+    #else
+        #define SIZE_T_SPECIFIER "%u"
+    #endif
+#elif defined(_WIN32)
+    #if defined(_WIN64)
+        #define SIZE_T_SPECIFIER "%lu"
+    #else
+        #define SIZE_T_SPECIFIER "%u"
+    #endif
 #endif
 
 #define min(a, b)\

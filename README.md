@@ -16,7 +16,7 @@ Steins;Gate MPK file extractor
 # Compilation
 Compile it using
 
-    gcc.exe --pedantic -ansi -Wall -Werror -Ofast -o SG_Fextract.exe SG_Fextract.c
+    gcc --pedantic -ansi -Wall -Werror -Ofast -o SG_Fextract SG_Fextract.c
 
 # MPK file
 MPK file is a file of simple structure, you can find detail [here](https://github.com/Dragneel1234/SG_Fextract/blob/master/MPKFILE.md)

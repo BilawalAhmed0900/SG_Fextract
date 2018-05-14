@@ -1,9 +1,17 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <dirent.h>
 #include <string.h>
+
+#if defined(__linux__) || defined(__APPLE__)
+    #include <sys/stat.h>
+    #include <alloca.h>
+    #include <unistd.h>
+    #define _mkdir(name) mkdir(name, 0777)
+#else
+    #define _mkdir(name) mkdir(name)
+#endif
 
 #define min(a, b)\
     (a < b) ? a : b
@@ -75,7 +83,6 @@ void print_help(void)
     fprintf(HELP_PRINT_TO, "   -h    \t: Print this help\n");
     fprintf(HELP_PRINT_TO, "   -l    \t: List file from input only\n");
     fprintf(HELP_PRINT_TO, "\n");
-    getch();
 }
 
 void *xalloc(size_t size)
@@ -83,7 +90,7 @@ void *xalloc(size_t size)
     void *ptr = malloc(size);
     if (ptr == NULL)
     {
-        fprintf(stderr, "Error: Can't allocate memory of size %d\n", size);
+        fprintf(stderr, "Error: Can't allocate memory of size %lu\n", size);
         exit(NOT_ENOUGH_MEMORY);
     }
     
@@ -281,7 +288,7 @@ void extract_all(FILE *inptr, char *outdir, fileheader *fhdr_array, int32_t coun
     
     if (strcmp(outdir, "nul") != 0)
     {
-        mkdir(outdir);
+        _mkdir(outdir);
     }
     
     for (loopcounter = 0; loopcounter < count; loopcounter++)

@@ -90,7 +90,7 @@ void *xalloc(size_t size)
     void *ptr = malloc(size);
     if (ptr == NULL)
     {
-        fprintf(stderr, "Error: Can't allocate memory of size %lu\n", size);
+        fprintf(stderr, "Error: Can't allocate memory of size %zu\n", size);
         exit(NOT_ENOUGH_MEMORY);
     }
     

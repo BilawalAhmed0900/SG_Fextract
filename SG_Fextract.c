@@ -21,7 +21,7 @@
 
 #define HELP_PRINT_TO stderr
 
-#ifdef _WIN32
+#if defined(_WIN32)
     #define DELIM "\\"
 #else
     #define DELIM "/"

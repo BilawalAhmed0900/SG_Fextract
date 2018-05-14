@@ -13,6 +13,12 @@
     #define _mkdir(name) mkdir(name)
 #endif
 
+#if defined(__i386__)
+    #define SIZE_T_SPECIFIER "%llu"
+#else
+    #define SIZE_T_SPECIFIER "%u"
+#endif
+
 #define min(a, b)\
     (a < b) ? a : b
 
@@ -90,7 +96,7 @@ void *xalloc(size_t size)
     void *ptr = malloc(size);
     if (ptr == NULL)
     {
-        fprintf(stderr, "Error: Can't allocate memory of size %zu\n", size);
+        fprintf(stderr, "Error: Can't allocate memory of size " SIZE_T_SPECIFIER, size);
         exit(NOT_ENOUGH_MEMORY);
     }
     

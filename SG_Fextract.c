@@ -17,6 +17,7 @@
     (a < b) ? a : b
 
 #define LIST_ARG "-l"
+#define ZEROING_ARG "-z"
 #define HELP_ARG "-h"
 
 #define HELP_PRINT_TO stderr
@@ -36,7 +37,8 @@ enum ERRORS
     NOT_ENOUGH_MEMORY,
     DIR_ALREADY_EXISTS,
     INCOMPLETE_FILE,
-    OPTIONAL_PARAMETER_PLACEMENT
+    OPTIONAL_PARAMETER_PLACEMENT,
+    WRITE_ERROR
 };
 
 #pragma pack(push, 1)
@@ -66,6 +68,7 @@ typedef struct _fileheader
 typedef struct _parameters
 {
     int32_t list_only;
+    int32_t zero_out_file;
     char *input_file;
     char *output_dir;
 } parameters;
@@ -73,7 +76,7 @@ typedef struct _parameters
 
 void print_help(void)
 {
-    fprintf(HELP_PRINT_TO, "SG_Fextract.exe [-h, -l] Input Output\n");
+    fprintf(HELP_PRINT_TO, "Usage: SG_Fextract [-h, -l, -z] Input Output\n");
     fprintf(HELP_PRINT_TO, "\n");
     fprintf(HELP_PRINT_TO, "Required parameters:\n");
     fprintf(HELP_PRINT_TO, "   Input \t: Input file to read from\n");
@@ -82,6 +85,9 @@ void print_help(void)
     fprintf(HELP_PRINT_TO, "Optional parameters:\n");
     fprintf(HELP_PRINT_TO, "   -h    \t: Print this help\n");
     fprintf(HELP_PRINT_TO, "   -l    \t: List file from input only\n");
+    fprintf(HELP_PRINT_TO, "   -z    \t: Zero out content of raw data inside file\n");
+    fprintf(HELP_PRINT_TO, "\n");
+    fprintf(HELP_PRINT_TO, "Note: -z will have no effect if -l is used");
     fprintf(HELP_PRINT_TO, "\n");
 }
 
@@ -163,6 +169,17 @@ void populate(parameters *params, int32_t argc, char *argv[])
             continue;
         }
         
+        if (strcmp(argv[loopcounter], ZEROING_ARG) == 0)
+        {
+            if (got_input == 1 || got_output == 1)
+            {
+                goto optional_placement_error;
+            }
+            
+            params->zero_out_file = 1;
+            continue;
+        }
+        
         if (argv[loopcounter][0] == '-')
         {
             goto error;
@@ -202,7 +219,7 @@ void populate(parameters *params, int32_t argc, char *argv[])
 FILE *file_open(char *filename, const char *mode)
 {
     FILE *ptr;
-    if (filename == NULL || mode == NULL || (strcmp(mode, "rb") != 0 && strcmp(mode, "wb")))
+    if (filename == NULL || mode == NULL)
     {
         fprintf(stderr, "Error: Arguments given to file_open are wrong\n");
         exit(WRONG_ARGUMENTS);
@@ -238,7 +255,7 @@ void print_fileheader(fileheader *fhdr)
         fhdr->filename);
 }
 
-void extract_one(FILE *inptr, char *outdir, fileheader *fhdr)
+void extract_one(FILE *inptr, char *outdir, fileheader *fhdr, int32_t zero_out_file)
 {
     char *name;
     char *buffer;
@@ -278,11 +295,22 @@ void extract_one(FILE *inptr, char *outdir, fileheader *fhdr)
         exit(INCOMPLETE_FILE);    
     }
     
+    if (zero_out_file == 1)
+    {
+        memset(buffer, 0, sizeofdata);
+        fseek(inptr, fhdr->position, SEEK_SET);
+        if (fwrite(buffer, 1, sizeofdata, inptr) != sizeofdata)
+        {
+            fprintf(stderr, "Error: Data can't be written\n");
+            exit(WRITE_ERROR);    
+        }
+    }
+    
     fclose(file);
     xfree(buffer);
 }
 
-void extract_all(FILE *inptr, char *outdir, fileheader *fhdr_array, int32_t count)
+void extract_all(FILE *inptr, char *outdir, fileheader *fhdr_array, int32_t count, int32_t zero_out_file)
 {
     int32_t loopcounter;
     
@@ -294,13 +322,13 @@ void extract_all(FILE *inptr, char *outdir, fileheader *fhdr_array, int32_t coun
     for (loopcounter = 0; loopcounter < count; loopcounter++)
     {
         printf("Extracting: %.2f%%\r", (float)loopcounter / count * 100);
-        extract_one(inptr, outdir, &fhdr_array[loopcounter]);
+        extract_one(inptr, outdir, &fhdr_array[loopcounter], zero_out_file);
     }
     
     printf("Extracting: 100.00%%\n");
 }
 
-void process(FILE *inptr, char *outdir, int32_t list_only)
+void process(FILE *inptr, char *outdir, int32_t list_only, int32_t zero_out_file)
 {
     mainheader mhdr;
     filecount  fcount;
@@ -345,7 +373,7 @@ void process(FILE *inptr, char *outdir, int32_t list_only)
         goto end;
     }
     
-    extract_all(inptr, outdir, fhdr, fcount.filecount);
+    extract_all(inptr, outdir, fhdr, fcount.filecount, zero_out_file);
     
     /* end of the function */
     end:
@@ -367,8 +395,8 @@ int32_t main(int32_t argc, char *argv[])
         exit(DIR_ALREADY_EXISTS);
     }
     
-    inptr = file_open(params.input_file, "rb");
-    process(inptr, params.output_dir, params.list_only);
+    inptr = file_open(params.input_file, "rb+");
+    process(inptr, params.output_dir, params.list_only, params.zero_out_file);
     
     fclose(inptr);
     

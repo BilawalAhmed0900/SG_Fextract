@@ -1,3 +1,6 @@
+#ifndef ERROR_ENUM_X
+#define ERROR_ENUM_X
+
 enum ERRORS
 {
     EXTRA_PARAMS = 1, NOT_ENOUGH_PARAMS, 
@@ -10,3 +13,5 @@ enum ERRORS
     OPTIONAL_PARAMETER_PLACEMENT,
     WRITE_ERROR
 };
+
+#endif /* ERROR_ENUM_X */

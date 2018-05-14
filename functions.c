@@ -1,3 +1,6 @@
+#ifndef FUNCTIONS_X
+#define FUNCTIONS_X
+
 void print_help(void)
 {
     fprintf(HELP_PRINT_TO, "Usage: SG_Fextract [-h, -l, -z] Input Output\n");
@@ -303,3 +306,5 @@ void process(FILE *inptr, char *outdir, int32_t list_only, int32_t zero_out_file
     end:
     xfree(fhdr);
 }
+
+#endif /* FUNCTIONS_X */

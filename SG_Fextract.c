@@ -3,6 +3,11 @@
 #include <dirent.h>
 #include <string.h>
 
+#if defined(__linux__)
+    #include <sys/stat.h>
+    #include <alloca.h>
+#endif
+
 #include "structs.c"
 #include "definitions.c"
 #include "errors_enum.c"

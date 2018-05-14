@@ -1,7 +1,7 @@
+#ifndef DEFINITIONS_X
+#define DEFINITIONS_X
+
 #if defined(__linux__)
-    #include <sys/stat.h>
-    #include <alloca.h>
-    #include <unistd.h>
     #define _mkdir(name) mkdir(name, 0777)
 #else
     #define _mkdir(name) mkdir(name)
@@ -21,3 +21,5 @@
 #else
     #define DELIM "/"
 #endif
+
+#endif /* DEFINITIONS_X */

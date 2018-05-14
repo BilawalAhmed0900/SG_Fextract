@@ -3,7 +3,8 @@ Steins;Gate MPK file extractor
 
 # Usage
 
-    SG_Fopener.exe [-h, -l] Input Output
+    SG_Fextract - Made by Dragneel1234@Github
+    Usage: SG_Fextract [-h, -l, -z] Input Output
 
     Required parameters:
        Input        : Input file to read from
@@ -12,6 +13,9 @@ Steins;Gate MPK file extractor
     Optional parameters:
        -h           : Print this help
        -l           : List file from input only
+       -z           : Zero out content of raw data inside file
+
+    Note: -z will have no effect if -l is used
 
 # Compilation
 Compile it using

@@ -4,7 +4,7 @@ Steins;Gate MPK file extractor
 # Usage
 
     SG_Fextract - Made by Dragneel1234@Github
-    Usage: SG_Fextract [-h, -l, -z] Input Output
+    Usage: SG_Fextract [-h, -l, -z, -r] Input Output
 
     Required parameters:
        Input        : Input file to read from
@@ -14,8 +14,9 @@ Steins;Gate MPK file extractor
        -h           : Print this help
        -l           : List file from input only
        -z           : Zero out content of raw data inside file
+       -r           : Put contents from output back to input
 
-    Note: -z will have no effect if -l is used
+    Note: -z and -r will have no effect if -l is used
 
 # Compilation
 Compile it using

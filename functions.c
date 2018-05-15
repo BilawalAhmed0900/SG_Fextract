@@ -15,7 +15,7 @@ void print_help(void)
     fprintf(HELP_PRINT_TO, "   -z    \t: Zero out content of raw data inside file\n");
     fprintf(HELP_PRINT_TO, "   -r    \t: Put contents from output back to input\n");
     fprintf(HELP_PRINT_TO, "\n");
-    fprintf(HELP_PRINT_TO, "Note: -z will have no effect if -l is used");
+    fprintf(HELP_PRINT_TO, "Note: -z and -r will have no effect if -l is used");
     fprintf(HELP_PRINT_TO, "\n");
 }
 

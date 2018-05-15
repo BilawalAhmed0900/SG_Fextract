@@ -12,6 +12,7 @@
 
 #define LIST_ARG "-l"
 #define ZEROING_ARG "-z"
+#define REPUT_ARG "-r"
 #define HELP_ARG "-h"
 
 #define HELP_PRINT_TO stderr

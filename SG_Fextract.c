@@ -40,7 +40,7 @@
     /* Used by extract_all */
     void extract_one(FILE *inptr, char *outdir, fileheader *fhdr, int32_t zero_out_file);
 
-    /* Extract all files from inptr, with info from fhdr_array */
+    /* Extract or re-add all files from inptr, with info from fhdr_array */
     void extract_all(FILE *inptr, char *outdir, fileheader *fhdr_array, int32_t count, int32_t zero_out_file);
 
     /* Process on inptr */
@@ -56,14 +56,14 @@ int32_t main(int32_t argc, char *argv[])
     
     memset(&params, 0, sizeof(parameters));
     populate(&params, argc, argv);
-    if (strcmp(params.output_dir, "nul") != 0 && dir_exists(params.output_dir))
+    if (strcmp(params.output_dir, "nul") != 0 && dir_exists(params.output_dir) && params.reput_to_file == 0)
     {
         fprintf(stderr, "'%s' already exists\n", params.output_dir);
         exit(DIR_ALREADY_EXISTS);
     }
     
     inptr = file_open(params.input_file, "rb+");
-    process(inptr, params.output_dir, params.list_only, params.zero_out_file);
+    process(inptr, params.output_dir, params.list_only, params.zero_out_file, params.reput_to_file);
     
     fclose(inptr);
     

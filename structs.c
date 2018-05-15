@@ -31,6 +31,7 @@ typedef struct _parameters
 {
     int32_t list_only;
     int32_t zero_out_file;
+    int32_t reput_to_file;
     char *input_file;
     char *output_dir;
 } parameters;
